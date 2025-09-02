@@ -9,3 +9,9 @@ services:
         sync: false
       - key: RAPIDAPI_HOST       # Added host variable for flexibility
         sync: false
+
+  - type: web
+    name: joblogy-frontend
+    env: static
+    staticPublishPath: frontend
+    autoDeploy: true
