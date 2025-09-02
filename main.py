@@ -1,47 +1,39 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
-import csv
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 from keybert import KeyBERT
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 
-load_dotenv()  # loads variables from .env
+# ------------------ Load env variables ------------------
+load_dotenv()
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 RAPIDAPI_HOST = os.getenv("RAPIDAPI_HOST")
 
 # ------------------ FastAPI App ------------------
 app = FastAPI()
 
-
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # frontend ka URL daal sakte ho ["http://localhost:3000"]
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # sare HTTP methods allow
-    allow_headers=["*"],  # sare headers allow
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-
 # ------------------ Models ------------------
-model = SentenceTransformer("all-MiniLM-L12-v2")
-kw_model = KeyBERT(model=model)
+kw_model = KeyBERT()
 
 custom_stopwords = {
-    "know", "knowing", "knowledge", "familiar", "familiarity", "skilled", "skill",
-    "skills", "ability", "abilities", "capable", "capability", "proficient",
-    "proficiency", "expert", "expertise", "experienced", "experience", "working",
-    "work", "worked", "works", "good", "strong", "excellent", "background",
-    "understanding", "motivated", "driven", "passionate", "enthusiastic",
-    "dedicated", "committed", "innovative", "creative", "responsible",
-    "hardworking", "self", "learner", "learning", "adaptable", "flexible",
-    "collaborative", "team", "player", "results", "oriented", "focused",
-    "fast", "quick", "etc", "others", "things", "various"
+    "know", "knowledge", "skill", "skills", "ability", "abilities",
+    "experience", "experienced", "working", "work", "works",
+    "good", "strong", "excellent", "motivated", "driven",
+    "passionate", "dedicated", "committed", "innovative",
+    "creative", "responsible", "team", "player", "focused"
 }
 
 # ------------------ Request Model ------------------
@@ -97,14 +89,16 @@ def fetch_jobs_from_api(description, city, state, country, date_posted):
     else:
         return []
 
-# ------------------ Semantic matching ------------------
+# ------------------ TF-IDF Matching ------------------
 def match_jobs_semantic(user_input, jobs, title_key="job_title"):
     if not jobs:
         return []
     titles = [job.get(title_key, "") for job in jobs]
-    user_emb = model.encode([user_input])
-    job_embs = model.encode(titles)
-    scores = cosine_similarity(user_emb, job_embs)[0]
+    docs = [user_input] + titles
+
+    vectorizer = TfidfVectorizer().fit_transform(docs)
+    vectors = vectorizer.toarray()
+    scores = cosine_similarity([vectors[0]], vectors[1:])[0]
 
     for i, job in enumerate(jobs):
         job["match_score"] = round(float(scores[i]) * 100, 2)
@@ -115,12 +109,11 @@ def match_jobs_semantic(user_input, jobs, title_key="job_title"):
 def format_date(iso_date_str):
     try:
         dt = datetime.fromisoformat(iso_date_str.replace("Z", ""))
-        return dt.strftime("%d %b %Y")  # e.g. "27 Aug 2025"
+        return dt.strftime("%d %b %Y")
     except Exception:
         return iso_date_str
 
 # ------------------ Routes ------------------
-
 @app.get("/")
 def home():
     return {"message": "Job finder API is running 🚀"}
