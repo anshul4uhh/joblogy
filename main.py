@@ -29,7 +29,7 @@ app.add_middleware(
 
 
 # ------------------ Models ------------------
-model = SentenceTransformer("all-MiniLM-L12-v2")
+model = SentenceTransformer("sentence-transformers/all-MiniLM-L12-v2")
 kw_model = KeyBERT(model=model)
 
 custom_stopwords = {
