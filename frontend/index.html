@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Search</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Job Search Portal</h1>
+
+    <!-- Search Form -->
+    <form id="jobForm">
+      <label for="description">Job Description</label>
+      <div class="input-group">
+        <input type="text" id="description" name="description" placeholder="e.g. Python Developer">
+        <button type="button" id="voiceBtn">🎤</button>
+      </div>
+
+      <label for="country">Country</label>
+      <input type="text" id="country" name="country" placeholder="e.g. in">
+
+      <label for="state">State</label>
+      <input type="text" id="state" name="state" placeholder="e.g. Karnataka">
+
+      <label for="city">City</label>
+      <input type="text" id="city" name="city" placeholder="e.g. Bangalore">
+
+      <button type="submit">Search Jobs</button>
+    </form>
+
+    <!-- Results Section -->
+    <div id="results" class="results"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

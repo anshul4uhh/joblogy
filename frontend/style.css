@@ -1,0 +1,126 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f7fc;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 40px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #0077ff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #005fcc;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-group input {
+  flex: 1;
+}
+
+.input-group button {
+  margin-left: 5px;
+  background: #28a745;
+}
+
+/* ========================= */
+/* Responsive Job Card Grid */
+/* ========================= */
+.results {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: 1fr; /* default: 1 column on mobile */
+  gap: 20px;
+}
+
+@media (min-width: 600px) {
+  .results {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
+  }
+}
+
+@media (min-width: 900px) {
+  .results {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on desktops */
+  }
+}
+
+.job-card {
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+.job-card:hover {
+  transform: translateY(-5px);
+}
+
+.job-card h3 {
+  margin: 0;
+  color: #0077ff;
+}
+
+.job-card p {
+  margin: 5px 0;
+}
+
+.apply-btn {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #ff5722;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.apply-btn:hover {
+  background: #e64a19;
+}
